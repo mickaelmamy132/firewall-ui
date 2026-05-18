@@ -82,35 +82,34 @@ function App() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#1a1a2e", color: "#fff" }}>
-      {/* Barre de navigation */}
-      <nav style={navStyle}>
-        <span style={{ fontSize: "1.3rem", fontWeight: "bold", marginRight: "20px" }}>
-          🔥 Firewall Dynamique
-        </span>
+      {/* Barre de navigation — visible uniquement pour l'admin */}
+      {userInfo?.is_admin && (
+        <nav style={navStyle}>
+          <span style={{ fontSize: "1.3rem", fontWeight: "bold", marginRight: "20px" }}>
+            🔥 Firewall Dynamique
+          </span>
 
-        {/* Onglet Dashboard uniquement pour l'admin */}
-        {userInfo?.is_admin && (
           <button style={btnStyle(page === "dashboard")} onClick={() => setPage("dashboard")}>
             🛡️ Dashboard Admin
           </button>
-        )}
 
-        <button style={btnStyle(page === "bonjour")} onClick={() => setPage("bonjour")}>
-          👋 Page Bonjour
-        </button>
+          <button style={btnStyle(page === "bonjour")} onClick={() => setPage("bonjour")}>
+            👋 Page Vitrine
+          </button>
 
-        {/* Indicateur d'IP */}
-        <span style={{
-          marginLeft: "auto", fontSize: "0.85rem", color: "#56ccf2",
-          background: "rgba(86,204,242,0.1)", padding: "4px 12px", borderRadius: "20px"
-        }}>
-          {userInfo?.is_admin ? "👑 Admin" : "🌐 Invité"} — {userInfo?.ip}
-        </span>
-      </nav>
+          {/* Indicateur d'IP */}
+          <span style={{
+            marginLeft: "auto", fontSize: "0.85rem", color: "#56ccf2",
+            background: "rgba(86,204,242,0.1)", padding: "4px 12px", borderRadius: "20px"
+          }}>
+            👑 Admin — {userInfo?.ip}
+          </span>
+        </nav>
+      )}
 
       {/* Contenu */}
-      {page === "dashboard" && userInfo?.is_admin && <IPList apiUrl={API_URL} />}
-      {page === "bonjour" && <BonjourPage apiUrl={API_URL} />}
+      {userInfo?.is_admin && page === "dashboard" && <IPList apiUrl={API_URL} />}
+      {(page === "bonjour" || !userInfo?.is_admin) && <BonjourPage apiUrl={API_URL} />}
     </div>
   );
 }
